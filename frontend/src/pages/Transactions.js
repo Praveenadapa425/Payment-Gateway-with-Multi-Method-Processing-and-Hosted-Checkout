@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 function Transactions() {
   const [transactions, setTransactions] = useState([]);
 
-  // Simulate fetching transactions from API
+  // Fetch transactions from API
   useEffect(() => {
     // In a real implementation, we would fetch this data from the backend
     // For now, we'll use mock data

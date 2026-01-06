@@ -7,6 +7,7 @@ import com.gateway.models.Payment;
 import com.gateway.repositories.MerchantRepository;
 import com.gateway.repositories.OrderRepository;
 import com.gateway.repositories.PaymentRepository;
+import com.gateway.utils.IdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -62,7 +63,7 @@ public class OrderService {
         String currency = request.getCurrency() != null ? request.getCurrency() : "INR";
 
         // Generate order ID
-        String orderId = "order_" + generateRandomString(16);
+        String orderId = IdGenerator.generateOrderId();
 
         // Create order entity
         Order order = new Order();

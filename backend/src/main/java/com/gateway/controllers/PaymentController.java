@@ -34,12 +34,18 @@ public class PaymentController {
             }
             // Handle validation errors
             else if (e.getMessage().contains("VPA is required") || 
-                     e.getMessage().contains("Invalid VPA format") ||
-                     e.getMessage().contains("Card details are required") ||
+                     e.getMessage().contains("Invalid VPA format")) {
+                ErrorResponse errorResponse = new ErrorResponse("INVALID_VPA", e.getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+            else if (e.getMessage().contains("Card details are required") ||
                      e.getMessage().contains("Card number is required") ||
                      e.getMessage().contains("Invalid card number") ||
-                     e.getMessage().contains("Invalid expiry date") ||
-                     e.getMessage().contains("amount must be at least")) {
+                     e.getMessage().contains("Invalid expiry date")) {
+                ErrorResponse errorResponse = new ErrorResponse("INVALID_CARD", e.getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+            else if (e.getMessage().contains("amount must be at least")) {
                 ErrorResponse errorResponse = new ErrorResponse("BAD_REQUEST_ERROR", e.getMessage());
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
             }

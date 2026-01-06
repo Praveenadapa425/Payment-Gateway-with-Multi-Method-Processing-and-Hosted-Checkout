@@ -1,0 +1,116 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+# Added manually
+.mvn/wrapper/
+
+# IDE
+*.swp
+*~
+.project
+.classpath
+.settings/
+*.launch
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~
+.history
+.nv/
+.snapshots/
+
+# Exceptions to the above rules
+!src/main/**/target/
+!src/test/**/target/
+
+# STS
+.springBeans
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Eclipse
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~
+.history
+.nv/
+.snapshots/
+
+# Various
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+*.zip
+*.tar.gz
+*.rar
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/dist
+
+# React
+build/
+*.env
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Icon?
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.test
+.env.production
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# Temporary folders
+tmp/
+temp/

@@ -7,6 +7,7 @@ import com.gateway.models.Payment;
 import com.gateway.repositories.MerchantRepository;
 import com.gateway.repositories.OrderRepository;
 import com.gateway.repositories.PaymentRepository;
+import com.gateway.utils.IdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -83,7 +84,7 @@ public class PaymentService {
         }
 
         // Generate payment ID
-        String paymentId = "pay_" + generateRandomString(16);
+        String paymentId = IdGenerator.generatePaymentId();
 
         // Create payment entity
         Payment payment = new Payment();

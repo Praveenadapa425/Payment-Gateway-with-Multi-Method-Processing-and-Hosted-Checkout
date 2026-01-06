@@ -17,6 +17,36 @@ function Checkout() {
   const [paymentStatus, setPaymentStatus] = useState(''); // 'idle', 'processing', 'success', 'error'
   const [paymentId, setPaymentId] = useState('');
   const [error, setError] = useState('');
+  
+  // Polling function to check payment status
+  const pollPaymentStatus = async (paymentId) => {
+    const poll = async () => {
+      try {
+        const response = await fetch(`/api/v1/payments/${paymentId}`);
+        const data = await response.json();
+        
+        if (response.ok) {
+          if (data.status === 'success') {
+            setPaymentStatus('success');
+          } else if (data.status === 'failed') {
+            setPaymentStatus('error');
+            setError(data.errorDescription || 'Payment failed');
+          } else {
+            // Continue polling if status is still processing
+            setTimeout(poll, 2000); // Poll every 2 seconds
+          }
+        } else {
+          setPaymentStatus('error');
+          setError(data.error?.description || 'Failed to check payment status');
+        }
+      } catch (err) {
+        setPaymentStatus('error');
+        setError('Failed to check payment status');
+      }
+    };
+    
+    poll();
+  };
 
   // Fetch order details when component mounts
   useEffect(() => {
@@ -63,18 +93,28 @@ function Checkout() {
     setError('');
 
     try {
-      // In a real implementation, this would call the public API
-      // For now, we'll simulate a payment
-      setTimeout(() => {
-        const success = Math.random() > 0.1; // 90% success rate
-        if (success) {
-          setPaymentStatus('success');
-          setPaymentId('pay_' + Math.random().toString(36).substr(2, 16));
-        } else {
-          setPaymentStatus('error');
-          setError('Payment failed');
-        }
-      }, 3000);
+      const response = await fetch('/api/v1/payments/public', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderId: orderId,
+          method: 'upi',
+          vpa: upiId
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setPaymentId(data.id);
+        // Start polling for payment status
+        pollPaymentStatus(data.id);
+      } else {
+        setPaymentStatus('error');
+        setError(data.error?.description || 'Payment failed');
+      }
     } catch (err) {
       setError('Payment failed');
       setPaymentStatus('error');
@@ -93,18 +133,37 @@ function Checkout() {
     setError('');
 
     try {
-      // In a real implementation, this would call the public API
-      // For now, we'll simulate a payment
-      setTimeout(() => {
-        const success = Math.random() > 0.05; // 95% success rate
-        if (success) {
-          setPaymentStatus('success');
-          setPaymentId('pay_' + Math.random().toString(36).substr(2, 16));
-        } else {
-          setPaymentStatus('error');
-          setError('Payment failed');
-        }
-      }, 3000);
+      // Parse expiry date
+      const [expiryMonth, expiryYear] = cardDetails.expiry.split('/').map(part => part.trim());
+      
+      const response = await fetch('/api/v1/payments/public', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderId: orderId,
+          method: 'card',
+          card: {
+            number: cardDetails.number,
+            expiry_month: expiryMonth,
+            expiry_year: expiryYear,
+            cvv: cardDetails.cvv,
+            holder_name: cardDetails.holderName
+          }
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setPaymentId(data.id);
+        // Start polling for payment status
+        pollPaymentStatus(data.id);
+      } else {
+        setPaymentStatus('error');
+        setError(data.error?.description || 'Payment failed');
+      }
     } catch (err) {
       setError('Payment failed');
       setPaymentStatus('error');

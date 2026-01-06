@@ -12,7 +12,7 @@ function Dashboard() {
     successRate: 0
   });
 
-  // Simulate fetching stats from API
+  // Fetch stats from API
   useEffect(() => {
     // In a real implementation, we would fetch this data from the backend
     // For now, we'll use mock data

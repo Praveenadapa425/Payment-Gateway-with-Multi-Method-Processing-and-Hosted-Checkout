@@ -1,14 +1,19 @@
 package com.gateway.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class GetOrderResponse {
     private String id;
+    @JsonProperty("merchant_id")
     private String merchantId;
     private Integer amount;
     private String currency;
     private String receipt;
     private Object notes;
     private String status;
+    @JsonProperty("created_at")
     private String createdAt;
+    @JsonProperty("updated_at")
     private String updatedAt;
 
     // Getters and Setters

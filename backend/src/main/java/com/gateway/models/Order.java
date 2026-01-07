@@ -1,7 +1,11 @@
 package com.gateway.models;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import java.util.UUID;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "orders")
@@ -11,7 +15,7 @@ public class Order {
     private String id;
 
     @Column(name = "merchant_id", nullable = false)
-    private String merchantId;
+    private UUID merchantId;
 
     @Column(nullable = false)
     private Integer amount;
@@ -22,22 +26,25 @@ public class Order {
     @Column(length = 255)
     private String receipt;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "JSONB")
-    private Object notes;
+    private String notes;
 
     @Column(length = 20, columnDefinition = "VARCHAR(20) DEFAULT 'created'")
     private String status = "created";
 
     @Column(name = "created_at", nullable = false, updatable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedAt;
 
     // Constructors
     public Order() {}
 
-    public Order(String id, String merchantId, Integer amount) {
+    public Order(String id, UUID merchantId, Integer amount) {
         this.id = id;
         this.merchantId = merchantId;
         this.amount = amount;
@@ -64,11 +71,11 @@ public class Order {
         this.id = id;
     }
 
-    public String getMerchantId() {
+    public UUID getMerchantId() {
         return merchantId;
     }
 
-    public void setMerchantId(String merchantId) {
+    public void setMerchantId(UUID merchantId) {
         this.merchantId = merchantId;
     }
 
@@ -96,11 +103,11 @@ public class Order {
         this.receipt = receipt;
     }
 
-    public Object getNotes() {
+    public String getNotes() {
         return notes;
     }
 
-    public void setNotes(Object notes) {
+    public void setNotes(String notes) {
         this.notes = notes;
     }
 

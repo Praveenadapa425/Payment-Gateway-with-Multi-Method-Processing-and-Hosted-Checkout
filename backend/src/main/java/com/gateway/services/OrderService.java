@@ -31,6 +31,9 @@ public class OrderService {
     @Autowired
     private ValidationService validationService;
 
+    @Autowired
+    private com.fasterxml.jackson.databind.ObjectMapper objectMapper;
+
     @Value("${TEST_MODE:false}")
     private boolean testMode;
 
@@ -68,11 +71,16 @@ public class OrderService {
         // Create order entity
         Order order = new Order();
         order.setId(orderId);
-        order.setMerchantId(merchant.getId().toString());
+        order.setMerchantId(merchant.getId());
         order.setAmount(request.getAmount());
         order.setCurrency(currency);
         order.setReceipt(request.getReceipt());
-        order.setNotes(request.getNotes());
+        // Convert notes object to JSON string
+        try {
+            order.setNotes(request.getNotes() != null ? objectMapper.writeValueAsString(request.getNotes()) : null);
+        } catch (com.fasterxml.jackson.core.JsonProcessingException e) {
+            throw new RuntimeException("Error processing notes", e);
+        }
         order.setStatus("created");
 
         // Save order
@@ -81,13 +89,13 @@ public class OrderService {
         // Create response
         CreateOrderResponse response = new CreateOrderResponse();
         response.setId(order.getId());
-        response.setMerchantId(order.getMerchantId());
+        response.setMerchantId(order.getMerchantId().toString());
         response.setAmount(order.getAmount());
         response.setCurrency(order.getCurrency());
         response.setReceipt(order.getReceipt());
         response.setNotes(order.getNotes());
         response.setStatus(order.getStatus());
-        response.setCreatedAt(order.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        response.setCreatedAt(order.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
         return response;
     }
@@ -102,7 +110,7 @@ public class OrderService {
         Merchant merchant = merchantOpt.get();
 
         // Find order by ID and merchant ID
-        Optional<Order> orderOpt = orderRepository.findByIdAndMerchantId(orderId, merchant.getId().toString());
+        Optional<Order> orderOpt = orderRepository.findByIdAndMerchantId(orderId, merchant.getId());
         if (!orderOpt.isPresent()) {
             throw new RuntimeException("Order not found");
         }
@@ -112,14 +120,14 @@ public class OrderService {
         // Create response
         GetOrderResponse response = new GetOrderResponse();
         response.setId(order.getId());
-        response.setMerchantId(order.getMerchantId());
+        response.setMerchantId(order.getMerchantId().toString());
         response.setAmount(order.getAmount());
         response.setCurrency(order.getCurrency());
         response.setReceipt(order.getReceipt());
         response.setNotes(order.getNotes());
         response.setStatus(order.getStatus());
-        response.setCreatedAt(order.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        response.setUpdatedAt(order.getUpdatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        response.setCreatedAt(order.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        response.setUpdatedAt(order.getUpdatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
         return response;
     }

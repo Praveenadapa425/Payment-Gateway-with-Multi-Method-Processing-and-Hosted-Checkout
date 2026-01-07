@@ -1,16 +1,24 @@
 package com.gateway.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CreatePaymentRequest {
+    @JsonProperty("order_id")
     private String orderId;
     private String method;
+    @JsonProperty("vpa")
     private String vpa;
     private CardDetails card;
 
     public static class CardDetails {
         private String number;
+        @JsonProperty("expiry_month")
         private String expiryMonth;
+        @JsonProperty("expiry_year")
         private String expiryYear;
+        @JsonProperty("cvv")
         private String cvv;
+        @JsonProperty("holder_name")
         private String holderName;
 
         // Getters and Setters

@@ -70,7 +70,7 @@ public class PaymentService {
         Order order = orderOpt.get();
 
         // Verify order belongs to the authenticated merchant
-        if (!order.getMerchantId().equals(merchant.getId().toString())) {
+        if (!order.getMerchantId().equals(merchant.getId())) {
             throw new RuntimeException("Order not found");
         }
 
@@ -90,7 +90,7 @@ public class PaymentService {
         Payment payment = new Payment();
         payment.setId(paymentId);
         payment.setOrderId(request.getOrderId());
-        payment.setMerchantId(merchant.getId().toString());
+        payment.setMerchantId(merchant.getId());
         payment.setAmount(order.getAmount());
         payment.setCurrency(order.getCurrency());
         payment.setMethod(request.getMethod());
@@ -152,7 +152,7 @@ public class PaymentService {
         response.setCurrency(payment.getCurrency());
         response.setMethod(payment.getMethod());
         response.setStatus(payment.getStatus());
-        response.setCreatedAt(payment.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        response.setCreatedAt(payment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
         if ("upi".equals(request.getMethod())) {
             response.setVpa(payment.getVpa());
@@ -174,7 +174,7 @@ public class PaymentService {
         Merchant merchant = merchantOpt.get();
 
         // Find payment by ID and merchant ID
-        Optional<Payment> paymentOpt = paymentRepository.findByIdAndMerchantId(paymentId, merchant.getId().toString());
+        Optional<Payment> paymentOpt = paymentRepository.findByIdAndMerchantId(paymentId, merchant.getId());
         if (!paymentOpt.isPresent()) {
             throw new RuntimeException("Payment not found");
         }
@@ -191,8 +191,8 @@ public class PaymentService {
         response.setStatus(payment.getStatus());
         response.setErrorCode(payment.getErrorCode());
         response.setErrorDescription(payment.getErrorDescription());
-        response.setCreatedAt(payment.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        response.setUpdatedAt(payment.getUpdatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        response.setCreatedAt(payment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        response.setUpdatedAt(payment.getUpdatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
         if ("upi".equals(payment.getMethod())) {
             response.setVpa(payment.getVpa());

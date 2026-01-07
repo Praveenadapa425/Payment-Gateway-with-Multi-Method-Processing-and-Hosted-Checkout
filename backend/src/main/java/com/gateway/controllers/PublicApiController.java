@@ -48,7 +48,7 @@ public class PublicApiController {
         Order order = orderOpt.get();
 
         // Verify that the order belongs to a valid merchant
-        Optional<Merchant> merchantOpt = merchantRepository.findById(java.util.UUID.fromString(order.getMerchantId()));
+        Optional<Merchant> merchantOpt = merchantRepository.findById(order.getMerchantId());
         if (!merchantOpt.isPresent()) {
             Map<String, Object> error = new HashMap<>();
             error.put("error", Map.of("code", "NOT_FOUND_ERROR", "description", "Order not found"));
@@ -61,7 +61,7 @@ public class PublicApiController {
         response.put("amount", order.getAmount());
         response.put("currency", order.getCurrency());
         response.put("status", order.getStatus());
-        response.put("created_at", order.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        response.put("created_at", order.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
         return ResponseEntity.ok(response);
     }
@@ -79,7 +79,7 @@ public class PublicApiController {
         Order order = orderOpt.get();
 
         // Verify that the order belongs to a valid merchant
-        Optional<Merchant> merchantOpt = merchantRepository.findById(java.util.UUID.fromString(order.getMerchantId()));
+        Optional<Merchant> merchantOpt = merchantRepository.findById(order.getMerchantId());
         if (!merchantOpt.isPresent()) {
             Map<String, Object> error = new HashMap<>();
             error.put("error", Map.of("code", "NOT_FOUND_ERROR", "description", "Order not found"));

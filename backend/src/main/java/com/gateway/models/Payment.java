@@ -1,7 +1,9 @@
 package com.gateway.models;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "payments")
@@ -14,7 +16,7 @@ public class Payment {
     private String orderId;
 
     @Column(name = "merchant_id", nullable = false)
-    private String merchantId;
+    private UUID merchantId;
 
     @Column(nullable = false)
     private Integer amount;
@@ -44,15 +46,17 @@ public class Payment {
     private String errorDescription;
 
     @Column(name = "created_at", nullable = false, updatable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime updatedAt;
 
     // Constructors
     public Payment() {}
 
-    public Payment(String id, String orderId, String merchantId, Integer amount, String method) {
+    public Payment(String id, String orderId, UUID merchantId, Integer amount, String method) {
         this.id = id;
         this.orderId = orderId;
         this.merchantId = merchantId;
@@ -89,11 +93,11 @@ public class Payment {
         this.orderId = orderId;
     }
 
-    public String getMerchantId() {
+    public UUID getMerchantId() {
         return merchantId;
     }
 
-    public void setMerchantId(String merchantId) {
+    public void setMerchantId(UUID merchantId) {
         this.merchantId = merchantId;
     }
 

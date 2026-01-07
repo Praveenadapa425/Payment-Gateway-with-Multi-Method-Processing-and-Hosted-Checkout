@@ -1,18 +1,27 @@
 package com.gateway.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class GetPaymentResponse {
     private String id;
+    @JsonProperty("order_id")
     private String orderId;
     private Integer amount;
     private String currency;
     private String method;
     private String vpa;
+    @JsonProperty("card_network")
     private String cardNetwork;
+    @JsonProperty("card_last4")
     private String cardLast4;
     private String status;
+    @JsonProperty("error_code")
     private String errorCode;
+    @JsonProperty("error_description")
     private String errorDescription;
+    @JsonProperty("created_at")
     private String createdAt;
+    @JsonProperty("updated_at")
     private String updatedAt;
 
     // Getters and Setters

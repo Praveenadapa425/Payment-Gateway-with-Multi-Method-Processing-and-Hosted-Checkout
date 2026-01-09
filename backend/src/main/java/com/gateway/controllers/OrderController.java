@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1")
 public class OrderController {
@@ -36,6 +38,28 @@ public class OrderController {
             else if (e.getMessage().contains("amount must be at least")) {
                 ErrorResponse errorResponse = new ErrorResponse("BAD_REQUEST_ERROR", e.getMessage());
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+            // Handle other errors
+            else {
+                ErrorResponse errorResponse = new ErrorResponse("BAD_REQUEST_ERROR", e.getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+        }
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<?> getAllOrders(
+            @RequestHeader("X-Api-Key") String apiKey,
+            @RequestHeader("X-Api-Secret") String apiSecret) {
+        
+        try {
+            List<GetOrderResponse> responses = orderService.getAllOrders(apiKey, apiSecret);
+            return ResponseEntity.ok(responses);
+        } catch (RuntimeException e) {
+            // Handle authentication errors
+            if (e.getMessage().equals("Invalid API credentials")) {
+                ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_ERROR", e.getMessage());
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
             // Handle other errors
             else {

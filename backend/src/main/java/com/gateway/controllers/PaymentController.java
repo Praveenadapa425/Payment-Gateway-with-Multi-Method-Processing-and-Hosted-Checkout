@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1")
 public class PaymentController {
@@ -53,6 +55,28 @@ public class PaymentController {
             else if (e.getMessage().equals("Order not found")) {
                 ErrorResponse errorResponse = new ErrorResponse("NOT_FOUND_ERROR", e.getMessage());
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            }
+            // Handle other errors
+            else {
+                ErrorResponse errorResponse = new ErrorResponse("BAD_REQUEST_ERROR", e.getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            }
+        }
+    }
+
+    @GetMapping("/payments")
+    public ResponseEntity<?> getAllPayments(
+            @RequestHeader("X-Api-Key") String apiKey,
+            @RequestHeader("X-Api-Secret") String apiSecret) {
+        
+        try {
+            List<GetPaymentResponse> responses = paymentService.getAllPayments(apiKey, apiSecret);
+            return ResponseEntity.ok(responses);
+        } catch (RuntimeException e) {
+            // Handle authentication errors
+            if (e.getMessage().equals("Invalid API credentials")) {
+                ErrorResponse errorResponse = new ErrorResponse("AUTHENTICATION_ERROR", e.getMessage());
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
             // Handle other errors
             else {

@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class PaymentService {
@@ -201,6 +203,46 @@ public class PaymentService {
             response.setCardLast4(payment.getCardLast4());
         }
 
+        return response;
+    }
+
+    public List<GetPaymentResponse> getAllPayments(String apiKey, String apiSecret) {
+        // Authenticate merchant
+        Optional<Merchant> merchantOpt = merchantRepository.findByApiKeyAndApiSecret(apiKey, apiSecret);
+        if (!merchantOpt.isPresent()) {
+            throw new RuntimeException("Invalid API credentials");
+        }
+
+        Merchant merchant = merchantOpt.get();
+
+        // Find all payments for this merchant
+        List<Payment> payments = paymentRepository.findByMerchantId(merchant.getId());
+
+        // Convert to responses
+        return payments.stream()
+            .map(this::convertToGetPaymentResponse)
+            .collect(Collectors.toList());
+    }
+
+    private GetPaymentResponse convertToGetPaymentResponse(Payment payment) {
+        GetPaymentResponse response = new GetPaymentResponse();
+        response.setId(payment.getId());
+        response.setOrderId(payment.getOrderId());
+        response.setAmount(payment.getAmount());
+        response.setCurrency(payment.getCurrency());
+        response.setMethod(payment.getMethod());
+        response.setStatus(payment.getStatus());
+        response.setErrorCode(payment.getErrorCode());
+        response.setErrorDescription(payment.getErrorDescription());
+        response.setCreatedAt(payment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        response.setUpdatedAt(payment.getUpdatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+
+        if ("upi".equals(payment.getMethod())) {
+            response.setVpa(payment.getVpa());
+        } else if ("card".equals(payment.getMethod())) {
+            response.setCardNetwork(payment.getCardNetwork());
+            response.setCardLast4(payment.getCardLast4());
+        }
         return response;
     }
 

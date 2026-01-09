@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -129,6 +130,38 @@ public class OrderService {
         response.setCreatedAt(order.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
         response.setUpdatedAt(order.getUpdatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
+        return response;
+    }
+
+    public List<GetOrderResponse> getAllOrders(String apiKey, String apiSecret) {
+        // Authenticate merchant
+        Optional<Merchant> merchantOpt = merchantRepository.findByApiKeyAndApiSecret(apiKey, apiSecret);
+        if (!merchantOpt.isPresent()) {
+            throw new RuntimeException("Invalid API credentials");
+        }
+
+        Merchant merchant = merchantOpt.get();
+
+        // Find all orders for this merchant
+        List<Order> orders = orderRepository.findByMerchantId(merchant.getId());
+
+        // Convert to responses
+        return orders.stream()
+            .map(this::convertToGetOrderResponse)
+            .collect(Collectors.toList());
+    }
+
+    private GetOrderResponse convertToGetOrderResponse(Order order) {
+        GetOrderResponse response = new GetOrderResponse();
+        response.setId(order.getId());
+        response.setMerchantId(order.getMerchantId().toString());
+        response.setAmount(order.getAmount());
+        response.setCurrency(order.getCurrency());
+        response.setReceipt(order.getReceipt());
+        response.setNotes(order.getNotes());
+        response.setStatus(order.getStatus());
+        response.setCreatedAt(order.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        response.setUpdatedAt(order.getUpdatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
         return response;
     }
 

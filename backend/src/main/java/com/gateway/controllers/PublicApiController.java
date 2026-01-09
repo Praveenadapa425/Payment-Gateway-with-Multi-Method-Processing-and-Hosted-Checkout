@@ -100,4 +100,40 @@ public class PublicApiController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
+    
+    @GetMapping("/payments/{paymentId}/public")
+    public ResponseEntity<?> getPublicPayment(@PathVariable("paymentId") String paymentId) {
+        // Find payment by ID
+        Optional<Payment> paymentOpt = paymentRepository.findById(paymentId);
+        if (!paymentOpt.isPresent()) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", Map.of("code", "NOT_FOUND_ERROR", "description", "Payment not found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+
+        Payment payment = paymentOpt.get();
+
+        // Verify that the payment belongs to a valid merchant
+        Optional<Merchant> merchantOpt = merchantRepository.findById(payment.getMerchantId());
+        if (!merchantOpt.isPresent()) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", Map.of("code", "NOT_FOUND_ERROR", "description", "Payment not found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
+
+        // Create public response with only basic info
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", payment.getId());
+        response.put("order_id", payment.getOrderId());
+        response.put("amount", payment.getAmount());
+        response.put("currency", payment.getCurrency());
+        response.put("method", payment.getMethod());
+        response.put("status", payment.getStatus());
+        response.put("error_code", payment.getErrorCode());
+        response.put("error_description", payment.getErrorDescription());
+        response.put("created_at", payment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        response.put("updated_at", payment.getUpdatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+
+        return ResponseEntity.ok(response);
+    }
 }

@@ -1,70 +1,76 @@
-# Payment Gateway
+# Payment Gateway System
 
-A comprehensive payment gateway system similar to Razorpay or Stripe, built with merchant onboarding, payment order management, and multi-method payment processing.
+> **Comprehensive Payment Gateway Solution**
+> 
+> A full-stack payment gateway system designed to handle merchant onboarding, order management, and multi-method payment processing with industry-standard security and reliability.
 
-## Features
+## 🚀 Key Features
 
-- RESTful API with merchant authentication using API key and secret
-- Support for UPI and Card payment methods
-- Hosted checkout page for customer payments
-- Dockerized deployment with single command setup
-- Proper validation for payment methods (VPA format, Luhn algorithm, card network detection)
-- Database persistence with PostgreSQL
-- Dashboard for merchants to view transactions
-- Automated test merchant seeding
-- Comprehensive payment status flow (processing → success/failed)
-- Secure card data handling (never stores full card numbers or CVV)
-- Real-time payment polling mechanism
-- Professional UI with responsive design
-- Indian Rupee (₹) currency formatting
+- **Secure RESTful API** with robust merchant authentication using API keys and secrets
+- **Multi-Method Payment Processing** supporting UPI and Card transactions
+- **Hosted Checkout Experience** for seamless customer payment flows
+- **Containerized Architecture** with Docker for easy deployment
+- **Advanced Validation** for payment methods (VPA format, Luhn algorithm, card network detection)
+- **Reliable Database Storage** with PostgreSQL persistence
+- **Merchant Dashboard** for transaction monitoring and analytics
+- **Automated Seeding** with test merchant credentials
+- **Complete Status Flow** with proper processing → success/failed transitions
+- **Secure Card Handling** with PCI-compliant data practices
+- **Real-Time Polling** for live payment status updates
+- **Professional UI/UX** with responsive design
+- **Indian Rupee (₹) Support** with proper currency formatting
 
-## Architecture
+## 🏗️ System Architecture
 
-- Backend API: Java Spring Boot application
-- Database: PostgreSQL
-- Dashboard: React frontend
-- Checkout Page: React frontend
-- Reverse Proxy: Nginx for static asset serving
+The payment gateway follows a microservices architecture pattern with the following components:
 
-## Prerequisites
+- **Backend API**: Java Spring Boot application with RESTful endpoints
+- **Database Layer**: PostgreSQL database for secure data persistence
+- **Merchant Dashboard**: React-based administrative interface
+- **Customer Checkout**: React-powered payment processing interface
+- **Reverse Proxy**: Nginx for efficient static asset delivery
 
-- Docker (version 20.10 or higher)
-- Docker Compose (version 2.0 or higher)
-- Git
+## 📋 Prerequisites
 
-## Installation
+Before deploying the payment gateway, ensure your system meets the following requirements:
 
-1. Clone the repository:
+- **Docker** (version 20.10 or higher)
+- **Docker Compose** (version 2.0 or higher)
+- **Git** for version control
+
+## 🛠️ Installation
+
+1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Praveenadapa425/Payment-Gateway-with-Multi-Method-Processing-and-Hosted-Checkout.git
    cd payment-gateway
    ```
 
-2. Copy the example environment file:
+2. **Configure environment variables**
    ```bash
    cp .env.example .env
    ```
 
-3. (Optional) Modify environment variables in `.env` if needed
+3. **(Optional) Customize environment settings** in `.env` as needed
 
-## Configuration
+## ⚙️ Configuration
 
 ### Environment Variables
 
-The following environment variables can be configured in `.env`:
+Customize the system behavior using the following environment variables in your `.env` file:
 
-**Backend API:**
+**Backend API Configuration:**
 - `PORT` - API server port (default: 8000)
 - `DATABASE_URL` - PostgreSQL connection string
 - `DB_USERNAME` - Database username
 - `DB_PASSWORD` - Database password
 
-**Test Merchant:**
+**Test Merchant Settings:**
 - `TEST_MERCHANT_EMAIL` - Email for test merchant (default: test@example.com)
 - `TEST_API_KEY` - API key for test merchant (default: key_test_abc123)
 - `TEST_API_SECRET` - API secret for test merchant (default: secret_test_xyz789)
 
-**Payment Processing:**
+**Payment Processing Configuration:**
 - `TEST_MODE` - Enable test mode for deterministic evaluation (default: false)
 - `TEST_PAYMENT_SUCCESS` - Force payment success/failure in test mode (default: true)
 - `TEST_PROCESSING_DELAY` - Fixed processing delay in test mode (default: 1000ms)
@@ -73,306 +79,251 @@ The following environment variables can be configured in `.env`:
 - `PROCESSING_DELAY_MIN` - Minimum processing delay in milliseconds (default: 5000)
 - `PROCESSING_DELAY_MAX` - Maximum processing delay in milliseconds (default: 10000)
 
-## Running the Application
+## ▶️ Running the Application
 
-Start all services with Docker Compose:
+Deploy all services using Docker Compose:
 
 ```bash
 docker-compose up -d
 ```
 
-The application will be available at:
-- API Server: http://localhost:8000
-- Dashboard: http://localhost:3000
-- Checkout Page: http://localhost:3001
-- Database: PostgreSQL on port 5432
+Upon successful deployment, the system will be accessible at the following endpoints:
 
-## Services
+| Service | URL | Description |
+|--------|-----|-------------|
+| **API Server** | http://localhost:8000 | Core payment gateway API |
+| **Merchant Dashboard** | http://localhost:3000 | Administrative interface |
+| **Customer Checkout** | http://localhost:3001 | Payment processing interface |
+| **Database** | PostgreSQL on port 5432 | Internal database access |
 
-The system consists of four main services:
+## 🧩 System Services
 
-1. **PostgreSQL Database** - Persistent storage for merchants, orders, and payments
-2. **API Server** - Java Spring Boot backend handling all business logic
-3. **Dashboard** - React frontend for merchant administration
-4. **Checkout Page** - React frontend for customer payments
+The payment gateway ecosystem comprises four essential services:
 
-### Service Dependencies
+1. **PostgreSQL Database** - Secure persistent storage for merchants, orders, and payments
+2. **API Server** - Java Spring Boot backend orchestrating all business logic
+3. **Merchant Dashboard** - React-based administrative interface for transaction management
+4. **Customer Checkout** - React-powered payment processing interface
 
-- PostgreSQL starts first with health checks
-- API server starts after PostgreSQL is healthy
-- Dashboard and checkout pages start after API server is available
+### Service Orchestration
 
-## Default Test Merchant
+The services follow a dependency-driven startup sequence:
 
-A test merchant is automatically created on startup with the following credentials:
-- Email: test@example.com
-- API Key: key_test_abc123
-- API Secret: secret_test_xyz789
+- **PostgreSQL** initializes first with comprehensive health checks
+- **API Server** launches upon PostgreSQL health confirmation
+- **Frontend Services** (Dashboard & Checkout) start once API server is operational
 
-These credentials can be used to authenticate API requests and access the dashboard.
+## 🔐 Default Test Credentials
 
-## API Documentation
+For immediate testing, the system automatically provisions a test merchant account:
 
-### Health Check
-- `GET /health` - Returns system health status
-  Response: `{"status": "healthy", "database": "connected", "timestamp": "2023-01-01T00:00:00"}`
+| Credential | Value |
+|------------|-------|
+| **Email** | test@example.com |
+| **API Key** | key_test_abc123 |
+| **API Secret** | secret_test_xyz789 |
 
-### Orders
-- `POST /api/v1/orders` - Create a new order (Requires authentication)
-  Headers: `X-Api-Key`, `X-Api-Secret`
-  Request: `{"amount": 50000, "currency": "INR", "receipt": "order_rcpt_123", "notes": {}}`
-  Response: `{"id": "order_xxx", "amount": 50000, "status": "created", ...}`
-  Status: 201 Created
+> **💡 Tip**: These credentials enable immediate access to API endpoints and the merchant dashboard for testing purposes.
 
-- `GET /api/v1/orders` - Get all orders for authenticated merchant
-  Headers: `X-Api-Key`, `X-Api-Secret`
-  Response: `[...]`
-  Status: 200 OK
 
-- `GET /api/v1/orders/{orderId}` - Get specific order details
-  Headers: `X-Api-Key`, `X-Api-Secret`
-  Status: 200 OK
 
-### Payments
-- `POST /api/v1/payments` - Process a payment (Requires authentication)
-  Headers: `X-Api-Key`, `X-Api-Secret`
-  Request: `{"order_id": "order_xxx", "method": "upi", "vpa": "user@bank"}` or `{"order_id": "order_xxx", "method": "card", "card": {...}}`
-  Response: `{"id": "pay_xxx", "order_id": "order_xxx", "status": "processing", ...}`
-  Status: 201 Created
+## 🗄️ Database Schema
 
-- `GET /api/v1/payments` - Get all payments for authenticated merchant
-  Headers: `X-Api-Key`, `X-Api-Secret`
-  Status: 200 OK
+The system utilizes PostgreSQL with a normalized schema design:
 
-- `GET /api/v1/payments/{paymentId}` - Get specific payment details
-  Headers: `X-Api-Key`, `X-Api-Secret`
-  Status: 200 OK
+### merchants Table
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | UUID | Primary key - unique merchant identifier |
+| `name` | VARCHAR | Merchant name |
+| `email` | VARCHAR | Unique email address |
+| `api_key` | VARCHAR | Unique API key for authentication |
+| `api_secret` | VARCHAR | API secret for authentication |
+| `webhook_url` | VARCHAR | Webhook callback URL |
+| `is_active` | BOOLEAN | Active status flag |
+| `created_at`, `updated_at` | TIMESTAMP | Record timestamps |
 
-### Public Endpoints (No Authentication Required)
-- `GET /api/v1/orders/{orderId}/public` - Get order details for checkout
-  Response: `{"id": "order_xxx", "amount": 50000, "status": "created"}`
+### orders Table
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | VARCHAR(64) | Primary key (format: order_xxxxxxxxxxxxxxxx) |
+| `merchant_id` | UUID | Foreign key referencing merchants |
+| `amount` | BIGINT | Amount in paise (smallest currency unit) |
+| `currency` | VARCHAR | Currency code (default: INR) |
+| `receipt` | VARCHAR | Receipt identifier |
+| `notes` | JSONB | Additional data in JSON format |
+| `status` | VARCHAR | Order status (default: created) |
+| `created_at`, `updated_at` | TIMESTAMP | Record timestamps |
 
-- `POST /api/v1/payments/public` - Process payment from checkout page
-  Request: `{"order_id": "order_xxx", "method": "upi", "vpa": "user@bank"}`
-  Status: 201 Created
+### payments Table
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | VARCHAR(64) | Primary key (format: pay_xxxxxxxxxxxxxxxx) |
+| `order_id` | VARCHAR(64) | Foreign key referencing orders |
+| `merchant_id` | UUID | Foreign key referencing merchants |
+| `amount` | BIGINT | Amount in paise |
+| `currency` | VARCHAR | Currency code (default: INR) |
+| `method` | VARCHAR | Payment method (upi, card) |
+| `status` | VARCHAR | Payment status (processing, success, failed) |
+| `vpa` | VARCHAR | Virtual Payment Address for UPI |
+| `card_network` | VARCHAR | Detected card network |
+| `card_last4` | VARCHAR | Last 4 digits of card |
+| `error_code`, `error_description` | VARCHAR | Error details for failed payments |
+| `created_at`, `updated_at` | TIMESTAMP | Record timestamps |
 
-- `GET /api/v1/payments/{paymentId}/public` - Get payment status for checkout
-  Response: `{"id": "pay_xxx", "status": "success", ...}`
+## 💳 Payment Processing Flow
 
-## Database Schema
+The system follows a secure and reliable payment processing workflow:
 
-The application uses PostgreSQL with the following tables:
-
-### merchants
-- `id` - UUID primary key
-- `name` - Merchant name
-- `email` - Unique email address
-- `api_key` - Unique API key
-- `api_secret` - API secret
-- `webhook_url` - Webhook callback URL
-- `is_active` - Active status
-- `created_at`, `updated_at` - Timestamps
-
-### orders
-- `id` - VARCHAR(64) primary key (format: order_xxxxxxxxxxxxxxxx)
-- `merchant_id` - Foreign key to merchants
-- `amount` - Amount in paise (smallest currency unit)
-- `currency` - Currency code (default: INR)
-- `receipt` - Receipt identifier
-- `notes` - JSONB field for additional data
-- `status` - Order status (default: created)
-- `created_at`, `updated_at` - Timestamps
-
-### payments
-- `id` - VARCHAR(64) primary key (format: pay_xxxxxxxxxxxxxxxx)
-- `order_id` - Foreign key to orders
-- `merchant_id` - Foreign key to merchants
-- `amount` - Amount in paise
-- `currency` - Currency code (default: INR)
-- `method` - Payment method (upi, card)
-- `status` - Payment status (processing, success, failed)
-- `vpa` - Virtual Payment Address for UPI
-- `card_network` - Detected card network
-- `card_last4` - Last 4 digits of card
-- `error_code`, `error_description` - Error details for failed payments
-- `created_at`, `updated_at` - Timestamps
-
-## Payment Processing Flow
-
-1. **Order Creation**: Merchant creates an order via API with amount and other details
-2. **Checkout Redirection**: Customer is redirected to checkout page with order_id
-3. **Public Order Retrieval**: Checkout page fetches order details via public API
-4. **Payment Processing**: Customer enters payment details and submits
+1. **Order Creation**: Merchant initiates an order via API with amount and relevant details
+2. **Checkout Redirection**: Customer is securely redirected to checkout page with encrypted order_id
+3. **Public Order Retrieval**: Checkout page retrieves order details via secured public API
+4. **Payment Processing**: Customer enters payment credentials and submits securely
 5. **Payment Validation**: System validates payment details (VPA format, Luhn algorithm)
-6. **Status Transition**: Payment starts with 'processing' status
-7. **Bank Simulation**: System simulates bank processing with 5-10 second delay
-8. **Final Status**: Payment transitions to 'success' or 'failed'
-9. **Status Polling**: Checkout page polls for status updates every 2 seconds
-10. **Result Display**: Final success or failure is shown to customer
+6. **Status Transition**: Payment initiates with 'processing' status
+7. **Bank Simulation**: System simulates banking operations with configurable delay
+8. **Final Status**: Payment transitions to 'success' or 'failed' based on validation
+9. **Status Polling**: Checkout page continuously polls for status updates every 2 seconds
+10. **Result Display**: Final transaction outcome is presented to the customer
 
-## Security Measures
+## 🔒 Security Measures
 
-- API authentication with X-Api-Key and X-Api-Secret headers
-- No storage of full card numbers or CVV codes
-- Card validation using Luhn algorithm
-- VPA format validation
-- Input sanitization and validation
-- SQL injection prevention through JPA repositories
-- Rate limiting considerations (can be added with Spring Cloud Gateway)
+The system implements industry-standard security practices:
 
-## Frontend Applications
+- **API Authentication** with X-Api-Key and X-Api-Secret headers
+- **PCI Compliance** - No storage of full card numbers or CVV codes
+- **Card Validation** using Luhn algorithm for number verification
+- **VPA Validation** with proper format checking for UPI transactions
+- **Input Sanitization** and comprehensive validation for all inputs
+- **SQL Injection Prevention** through JPA repositories and parameterized queries
+- **Rate Limiting Capabilities** (configurable with Spring Cloud Gateway)
 
-### Dashboard (Port 3000)
-- Professional dashboard with merchant API credentials
-- Real-time transaction statistics (total transactions, amount, success rate)
-- Transaction history table with search and filter capabilities
-- Clean, responsive design with modern UI elements
-- Data-test-id attributes for automated testing
-- Indian Rupee (₹) currency formatting
+## 🖥️ Frontend Applications
 
-### Checkout Page (Port 3001)
-- Secure payment processing interface
-- Support for UPI and card payments
-- Real-time payment status updates
-- Processing state with animated indicators
-- Success and failure states with clear messaging
-- Form validation for payment details
-- Mobile-responsive design
-- Data-test-id attributes for automated testing
+### Merchant Dashboard (Port 3000)
 
-## Validation Logic
+A comprehensive administrative interface featuring:
 
-The system includes comprehensive validation:
+- **API Credential Management** with secure display and optional masking
+- **Real-Time Analytics** with transaction metrics (volume, value, success rates)
+- **Transaction History** with advanced filtering and search capabilities
+- **Modern UI Design** with responsive, mobile-first approach
+- **Automated Testing Support** with comprehensive data-test-id attributes
+- **Regional Currency Support** with Indian Rupee (₹) formatting
 
-- **VPA Validation**: Uses regex pattern `^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+$` for UPI IDs
-- **Luhn Algorithm**: Validates card numbers using the standard algorithm
-- **Card Network Detection**: Identifies Visa, Mastercard, Amex, and RuPay
-- **Card Expiry Validation**: Checks month/year format and compares with current date
-- **Amount Validation**: Ensures minimum amount of 100 paise (₹1)
-- **Order Ownership**: Verifies orders belong to authenticated merchants
+### Customer Checkout (Port 3001)
 
-## Test Mode
+A secure payment processing interface with:
 
-The application supports test mode for deterministic evaluation:
+- **Multi-Method Support** for both UPI and card transactions
+- **Real-Time Status Updates** with live payment tracking
+- **Interactive UI Elements** with animated processing indicators
+- **Clear Outcome Messaging** for success and failure states
+- **Comprehensive Validation** for all payment inputs
+- **Mobile-Responsive Design** for cross-device compatibility
+- **Automated Testing Support** with comprehensive data-test-id attributes
 
-- `TEST_MODE=true` enables deterministic payment outcomes
-- `TEST_PAYMENT_SUCCESS=true/false` forces payment success/failure
-- `TEST_PROCESSING_DELAY` sets fixed processing delay for predictable testing
+## ✅ Validation Logic
 
-## Error Handling
+The system incorporates comprehensive validation mechanisms:
 
-Standardized error codes are used throughout the API:
+- **VPA Validation**: Employs regex pattern `^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+$` for UPI ID verification
+- **Luhn Algorithm**: Implements standard algorithm for card number validation
+- **Card Network Detection**: Automatically identifies Visa, Mastercard, Amex, and RuPay networks
+- **Card Expiry Validation**: Validates month/year format and ensures future dates
+- **Amount Validation**: Enforces minimum threshold of 100 paise (₹1)
+- **Order Ownership**: Confirms orders belong to authenticated merchants
 
-- `AUTHENTICATION_ERROR` - Invalid API credentials
-- `BAD_REQUEST_ERROR` - Validation errors
-- `NOT_FOUND_ERROR` - Resource not found
-- `PAYMENT_FAILED` - Payment processing failed
-- `INVALID_VPA` - VPA format invalid
-- `INVALID_CARD` - Card validation failed
+## 🧪 Test Mode Configuration
 
-HTTP status codes follow REST conventions:
-- 201 - Resource created (orders, payments)
-- 200 - Successful GET requests
-- 400 - Validation errors
-- 401 - Authentication failures
-- 404 - Resource not found
+The system provides configurable test environments for deterministic evaluation:
 
-## Deployment
+- **`TEST_MODE=true`** enables predictable payment outcomes for consistent testing
+- **`TEST_PAYMENT_SUCCESS=true/false`** forces predetermined success or failure states
+- **`TEST_PROCESSING_DELAY`** sets fixed processing delays for reliable test execution
 
-The application is fully containerized and production-ready:
+## ⚠️ Error Handling
 
-1. Build all services with `docker-compose build`
-2. Start with `docker-compose up -d`
-3. All services are automatically configured and interconnected
-4. Database schema is initialized automatically
-5. Test merchant is created automatically
-6. Health checks ensure service readiness
+The system employs standardized error codes for consistent API responses:
 
-## Troubleshooting
+| Error Code | Description |
+|------------|-------------|
+| `AUTHENTICATION_ERROR` | Invalid API credentials |
+| `BAD_REQUEST_ERROR` | Validation errors |
+| `NOT_FOUND_ERROR` | Resource not found |
+| `PAYMENT_FAILED` | Payment processing failed |
+| `INVALID_VPA` | VPA format invalid |
+| `INVALID_CARD` | Card validation failed |
 
-### Common Issues
+REST-compliant HTTP status codes:
 
-1. **Services not starting**: Ensure Docker and Docker Compose are installed and running
-2. **Port conflicts**: Check if ports 8000, 3000, 3001, or 5432 are in use
-3. **Database connection errors**: Verify PostgreSQL service is running and healthy
-4. **API authentication failures**: Use the default test merchant credentials
-5. **Checkout page showing 'No order ID provided'**: Ensure order_id parameter is passed in URL
+- **201 Created** - Resource successfully created (orders, payments)
+- **200 OK** - Successful GET requests
+- **400 Bad Request** - Validation errors
+- **401 Unauthorized** - Authentication failures
+- **404 Not Found** - Resource not found
 
-### Debugging Tips
+## 🚀 Production Deployment
 
-1. Check Docker logs: `docker-compose logs -f`
-2. Verify service health: `docker-compose ps`
-3. Access individual containers: `docker-compose exec <service> bash`
-4. Test API endpoints directly: `curl http://localhost:8000/health`
+The system is engineered for containerized, production-ready deployment:
 
-### Environment-specific Issues
+1. **Build Services**: Execute `docker-compose build` to compile all components
+2. **Launch Infrastructure**: Run `docker-compose up -d` for daemonized deployment
+3. **Auto-Configuration**: All services initialize and establish interconnections automatically
+4. **Schema Initialization**: Database schema is provisioned automatically
+5. **Merchant Seeding**: Test merchant account is created automatically
+6. **Health Verification**: Built-in health checks ensure service readiness
 
-- On Windows: Use Git Bash or PowerShell for Docker commands
-- On Linux: May need to run Docker with sudo
-- Ensure sufficient memory allocation for Docker (at least 4GB)
 
-## Development
 
-### Local Development
+## 🛠️ Development Guidelines
 
-For local development without Docker:
+### Local Development Environment
 
-1. **Backend**: Run `mvn spring-boot:run` in the backend directory
-2. **Frontend**: Run `npm start` in the frontend directory
-3. **Checkout**: Run `npm start` in the checkout-page directory
+For development without Docker containers:
 
-### Building Production Images
+1. **Backend API**: Execute `mvn spring-boot:run` in the backend directory
+2. **Merchant Dashboard**: Execute `npm start` in the frontend directory
+3. **Customer Checkout**: Execute `npm start` in the checkout-page directory
 
-Build all services:
+### Production Image Construction
+
+Compile all services:
 ```bash
 docker-compose build
 ```
 
-Rebuild without cache if needed:
+Perform clean rebuild if required:
 ```bash
 docker-compose build --no-cache
 ```
 
-### Stopping Services
+### Service Management
 
-Stop all services:
+Terminate all services:
 ```bash
 docker-compose down
 ```
 
-Stop and remove volumes:
+Terminate and purge volumes:
 ```bash
 docker-compose down -v
 ```
 
-## Monitoring and Maintenance
+## 📊 Monitoring and Maintenance
 
-### Health Checks
+### Health Monitoring
 
-The system includes health endpoints for monitoring:
-- `/health` - Overall system health
-- Docker health checks monitor PostgreSQL readiness
+The system provides comprehensive health monitoring capabilities:
 
-### Performance Considerations
+- **`/health`** - Overall system health status with detailed diagnostics
+- **Docker Health Checks** - Continuous PostgreSQL readiness monitoring
 
-- Connection pooling is configured for database access
-- Static assets are served through Nginx for optimal performance
-- Caching strategies can be added as needed
+## 🎬 Visual Demonstrations
 
-### Security Updates
+### Demo Video
 
-- Keep Docker base images updated
-- Monitor for security vulnerabilities in dependencies
-- Regular security audits of authentication mechanisms
+**[Complete Payment Flow Demo](https://vimeo.com/1153118558/41cdffc48b)** (2-3 minutes)
 
-## Contributing
+Demonstrates the complete payment flow from order creation via API to successful payment completion on checkout page.
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License.
